@@ -63,6 +63,16 @@ run *args:
     if [ "$#" -eq 0 ]; then set -- --help; fi
     cargo run --release -p obscura-cli --features render -- "$@"
 
+# Install `obscura` and `obscura-worker` (with rendering) into ~/.cargo/bin; reuses ./target.
+[group('Development')]
+install:
+    CARGO_TARGET_DIR="{{justfile_directory()}}/target" cargo install --path crates/obscura-cli --features render --locked
+
+# Install `obscura` and `obscura-worker` with rendering and stealth (needs cmake).
+[group('Development')]
+install-stealth:
+    CARGO_TARGET_DIR="{{justfile_directory()}}/target" cargo install --path crates/obscura-cli --features render,stealth --locked
+
 # Fetch a page.  Usage:  just fetch https://example.com [text|html|links|markdown|...]
 [group('Development')]
 fetch url dump="text":
